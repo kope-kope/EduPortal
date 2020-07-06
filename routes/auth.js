@@ -6,7 +6,7 @@ const authController = require('../controllers/auth');
 
 const router = express.Router();
 
-router.put(
+router.post(
   '/signup',
   [
     body('email')
@@ -24,10 +24,6 @@ router.put(
       .trim()
       .isLength({ min: 5 }),
     body('name')
-      .trim()
-      .not()
-      .isEmpty(),
-      body('dob')
       .trim()
       .not()
       .isEmpty()

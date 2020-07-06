@@ -56,7 +56,7 @@ exports.createSponsor = (req, res, next) => {
   // const signature = req.file.path.replace('\\', '/');
   const email = req.body.email;
   const name = req.body.name;
-  const nationality= req.body.nationality;
+  const nationality = req.body.nationality;
   const dob = req.body.dob.toString()
   const gender = req.body.gender;
   const address = req.body.address;
@@ -80,7 +80,7 @@ exports.createSponsor = (req, res, next) => {
     mobileNumber: mobileNumber,
     maidenName: maidenName,
     // signature: signature,
-    insuranceCover : insuranceCover
+    insuranceCover: insuranceCover
   });
   sponsor
     .save()
@@ -94,10 +94,10 @@ exports.createSponsor = (req, res, next) => {
     // })
     .then(sponsor =>
       res.status(201).json({
-      message: 'Sponsor created successfully!',
-      sponsor: sponsor,
-      sponsorId: sponsor._id.toString() 
-    })
+        message: 'Sponsor created successfully!',
+        sponsor: sponsor,
+        sponsorId: sponsor._id.toString()
+      })
     )
     .catch(err => {
       if (!err.statusCode) {
@@ -105,12 +105,13 @@ exports.createSponsor = (req, res, next) => {
       }
       next(err);
     });
-};      
+};
 
 
 exports.getSponsor = (req, res, next) => {
   const sponsorId = req.params.sponsorId;
   Sponsor.findById(sponsorId)
+    .populate('beneficiaries')
     .then(sponsor => {
       if (!sponsor) {
         const error = new Error('Could not find sponsor.');
@@ -121,7 +122,7 @@ exports.getSponsor = (req, res, next) => {
     })
     .catch(err => {
       if (!err.statusCode) {
-        err.statusCode = 500;
+        err.statusCode = 404;
       }
       next(err);
     });
@@ -135,18 +136,18 @@ exports.updateSponsor = (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
-   // let signature
-   const email = req.body.email;
-   const name = req.body.name;
-   const nationality= req.body.nationality;
-   const dob = req.body.dob.toString()
-   const gender = req.body.gender;
-   const address = req.body.address;
-   const occupation = req.body.occupation;
-   const maritalStatus = req.body.maritalStatus;
-   const maidenName = req.body.maidenName;
-   const mobileNumber = req.body.mobileNumber;
-   const insuranceCover = req.body.insuranceCover.toString()
+  // let signature
+  const email = req.body.email;
+  const name = req.body.name;
+  const nationality = req.body.nationality;
+  const dob = req.body.dob.toString()
+  const gender = req.body.gender;
+  const address = req.body.address;
+  const occupation = req.body.occupation;
+  const maritalStatus = req.body.maritalStatus;
+  const maidenName = req.body.maidenName;
+  const mobileNumber = req.body.mobileNumber;
+  const insuranceCover = req.body.insuranceCover.toString()
   // if (req.file) {
   //   signature = req.file.path.replace('\\', '/');;
   // }
@@ -156,13 +157,13 @@ exports.updateSponsor = (req, res, next) => {
   //   throw error;
   // }
   Sponsor.findById(sponsorId)
-    .then(sponsor=> {
+    .then(sponsor => {
       if (!sponsor) {
         const error = new Error('Could not find sponsor.');
         error.statusCode = 404;
         throw error;
       }
-  
+
       // if (signature !== sponsor.signature) {
       //   clearImage(post.imageUrl);
       // }
@@ -181,7 +182,7 @@ exports.updateSponsor = (req, res, next) => {
       return sponsor.save();
     })
     .then(sponsor => {
-      res.status(200).json({ message: 'Sponsor updated!', sponsor: sponsor, sponsorId: sponsor._id.toString()  });
+      res.status(200).json({ message: 'Sponsor updated!', sponsor: sponsor, sponsorId: sponsor._id.toString() });
     })
     .catch(err => {
       if (!err.statusCode) {
@@ -239,16 +240,16 @@ exports.createBene = (req, res, next) => {
   const gender = req.body.gender;
   const age = req.body.age;
   const presentClass = req.body.presentClass
-  const phDcountry = req.body.phDcountry;
-  const phDiN = req.body.phDin
-  const pGcountry = req.body.pGcountry;
-  const pGin = req.body.pGin;
-  const uGcountry = req.body.uGcountry;
-  const uGin = req.body.uGin;
+  const phdCountry = req.body.phdCountry;
+  const phdInstitutionname = req.body.phdInstitutionname
+  const pgCountry = req.body.pgCountry;
+  const pgInstitutionname = req.body.pgInstitutionname
+  const ugCountry = req.body.ugCountry;
+  const ugInstitutionname = req.body.ugInstitutionname;
   const ssCountry = req.body.ssCountry;
-  const ssIn = req.body.ssIn
+  const ssInstitutionname = req.body.ssInstitutionname
   const psCountry = req.body.psCountry;
-  const psIn = req.body.psIn
+  const psInstitutionname = req.body.psInstitutionname
   const sponsor = req.body.sponsorId
   // const sponsorId = req.body.sponsorId
 
@@ -262,16 +263,16 @@ exports.createBene = (req, res, next) => {
     gender: gender,
     sponsor: sponsor,
   });
-  bene.phD.country = phDcountry
-  bene.phD.institutionName = phDiN
-  bene.postGraduate.country = pGcountry
-  bene.postGraduate.institutionName = pGin
-  bene.underGraduate.country = uGcountry
-  bene.underGraduate.institutionName = uGin
+  bene.phD.country = phdCountry
+  bene.phD.institutionName = phdInstitutionname
+  bene.postGraduate.country = pgCountry
+  bene.postGraduate.institutionName = pgInstitutionname
+  bene.underGraduate.country = ugCountry
+  bene.underGraduate.institutionName = ugInstitutionname
   bene.secondarySchool.country = ssCountry
-  bene.secondarySchool.institutionName = ssIn
+  bene.secondarySchool.institutionName = ssInstitutionname
   bene.primarySchool.country = psCountry
-  bene.primarySchool.institutionName = psIn
+  bene.primarySchool.institutionName = psInstitutionname
   bene
     .save()
     .then(result => {
@@ -295,7 +296,7 @@ exports.createBene = (req, res, next) => {
       next(err);
     });
 };
- 
+
 
 exports.updateBene = (req, res, next) => {
   const beneId = req.params.beneId;
@@ -307,7 +308,7 @@ exports.updateBene = (req, res, next) => {
   }
 
   Bene.findById(beneId)
-    .then(bene=> {
+    .then(bene => {
       if (!bene) {
         const error = new Error('Could not find beneficiary.');
         error.statusCode = 404;
@@ -330,46 +331,46 @@ exports.updateBene = (req, res, next) => {
       const psIn = req.body.psIn
       const sponsorId = req.body.sponsorId
 
-    Bene.findById(beneId)
-    .then(bene=> {
-      if (!bene) {
-        const error = new Error('Could not find beneficiary.');
-        error.statusCode = 404;
-        throw error;
-      }
-  
-      bene.name = name;
-      bene.gender = gender;
-      bene.age = age;
-      bene.presentClass = presentClass;
-      bene.sponsor = sponsorId;
-      bene.phD.country = phDcountry
-      bene.phD.institutionName = phDiN
-     bene.postGraduate.country = pGcountry
-  bene.postGraduate.institutionName = pGin
-  bene.underGraduate.country = uGcountry
-  bene.underGraduate.institutionName = uGin
-  bene.secondarySchool.country = ssCountry
-  bene.secondarySchool.institutionName = ssIn
-  bene.primarySchool.country = psCountry
-  bene.primarySchool.institutionName = psIn
-  bene.save();
-    })
-    .then(result => {
-      res.status(200).json({ message: 'Beneficiary updated!',  bene: result});
-    })
-    .catch(err => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
+      Bene.findById(beneId)
+        .then(bene => {
+          if (!bene) {
+            const error = new Error('Could not find beneficiary.');
+            error.statusCode = 404;
+            throw error;
+          }
+
+          bene.name = name;
+          bene.gender = gender;
+          bene.age = age;
+          bene.presentClass = presentClass;
+          bene.sponsor = sponsorId;
+          bene.phD.country = phDcountry
+          bene.phD.institutionName = phDiN
+          bene.postGraduate.country = pGcountry
+          bene.postGraduate.institutionName = pGin
+          bene.underGraduate.country = uGcountry
+          bene.underGraduate.institutionName = uGin
+          bene.secondarySchool.country = ssCountry
+          bene.secondarySchool.institutionName = ssIn
+          bene.primarySchool.country = psCountry
+          bene.primarySchool.institutionName = psIn
+          bene.save();
+        })
+        .then(result => {
+          res.status(200).json({ message: 'Beneficiary updated!', bene: result });
+        })
+        .catch(err => {
+          if (!err.statusCode) {
+            err.statusCode = 500;
+          }
+          next(err);
+        });
     });
-});
 
 }
 
 
- exports.deleteBene = (req, res, next) => {
+exports.deleteBene = (req, res, next) => {
   const beneId = req.params.beneId;
   Bene.findById(beneId)
     .then(bene => {
