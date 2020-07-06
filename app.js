@@ -49,6 +49,7 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.use('/', sponsorRoutes);
 app.use('/auth', authRoutes);
 
@@ -58,6 +59,12 @@ app.use((error, req, res, next) => {
   const message = error.message;
   const data = error.data;
   res.status(status).json({ message: message, data: data });
+});
+
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 mongoose
