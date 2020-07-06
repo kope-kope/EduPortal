@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "MONGOUSER=tosin MONGOPASSWORD=Cy2svEQC0bAz4IDv MONGODB=portal?retryWrites=true&w=majority node app.js" 
   },
   "repository": {
     "type": "git",

@@ -11,6 +11,10 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
+const MONGODB_URI = 
+
+`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0-hqnwm.mongodb.net/portal?retryWrites=true&w=majority`
+
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'images');
@@ -69,9 +73,9 @@ app.get('/*', (req, res) => {
 
 mongoose
   .connect(
-    'mongodb+srv://tosin:Cy2svEQC0bAz4IDv@cluster0-hqnwm.mongodb.net/portal?retryWrites=true&w=majority'
+    MONGODB_URI
   )
   .then(result => {
-    app.listen(8080);
+    app.listen(process.env.PORT || 8080);
   })
   .catch(err => console.log(err));
