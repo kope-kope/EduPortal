@@ -22,7 +22,7 @@ exports.getSponsors = (req, res, next) => {
       totalItems = count;
       return Sponsor.find()
         .skip((currentPage - 1) * perPage)
-        .limit(perPage);
+        .limit(perPage)
     })
     .then(sponsor => {
       res
@@ -110,8 +110,7 @@ exports.createSponsor = (req, res, next) => {
 
 exports.getSponsor = (req, res, next) => {
   const sponsorId = req.params.sponsorId;
-  Sponsor.findById(sponsorId)
-    .populate('beneficiaries')
+  Sponsor.findById(sponsorId).populate('beneficiaries')
     .then(sponsor => {
       if (!sponsor) {
         const error = new Error('Could not find sponsor.');
@@ -198,7 +197,7 @@ exports.deleteSponsor = (req, res, next) => {
   Sponsor.findById(sponsorId)
     .then(sponsor => {
       if (!sponsor) {
-        const error = new Error('Could not find post.');
+        const error = new Error('Could not find sponsor.');
         error.statusCode = 404;
         throw error;
       }
@@ -208,6 +207,10 @@ exports.deleteSponsor = (req, res, next) => {
       //   throw error;
       // }
       // clearImage(sponsor.signature);
+      return Bene.findOneAndRemove({ sponsor: sponsorId });
+
+    })
+    .then(result => {
       return Sponsor.findByIdAndRemove(sponsorId);
     })
     .then(result => {
@@ -259,7 +262,7 @@ exports.createBene = (req, res, next) => {
     name: name,
     gender: gender,
     age: age,
-    presentClass:presentClass,
+    presentClass: presentClass,
     gender: gender,
     sponsor: sponsor,
   });
@@ -276,18 +279,18 @@ exports.createBene = (req, res, next) => {
   bene
     .save()
     .then(result => {
-    return Sponsor.findById(req.body.sponsorId);
+      return Sponsor.findById(req.body.sponsorId);
     })
     .then(sponsor => {
       sponsor = sponsor;
       sponsor.beneficiaries.push(bene);
-     return sponsor.save();
+      return sponsor.save();
     })
     .then(result =>
       res.status(201).json({
-      message: 'Beneficiary created successfully!',
-      bene: bene 
-    })
+        message: 'Beneficiary created successfully!',
+        bene: bene
+      })
     )
     .catch(err => {
       if (!err.statusCode) {
@@ -319,17 +322,17 @@ exports.updateBene = (req, res, next) => {
       const gender = req.body.gender;
       const age = req.body.age;
       const presentClass = req.body.presentClass
-      const phDcountry = req.body.phDcountry;
-      const phDiN = req.body.phDin
-      const pGcountry = req.body.pGcountry;
-      const pGin = req.body.pGin;
-      const uGcountry = req.body.uGcountry;
-      const uGin = req.body.uGin;
-      const ssCountry = req.body.sscountry;
-      const ssIn = req.body.ssIn
+      const phdCountry = req.body.phdCountry;
+      const phdInstitutionname = req.body.phdInstitutionname
+      const pgCountry = req.body.pgCountry;
+      const pgInstitutionname = req.body.pgInstitutionname
+      const ugCountry = req.body.ugCountry;
+      const ugInstitutionname = req.body.ugInstitutionname;
+      const ssCountry = req.body.ssCountry;
+      const ssInstitutionname = req.body.ssInstitutionname
       const psCountry = req.body.psCountry;
-      const psIn = req.body.psIn
-      const sponsorId = req.body.sponsorId
+      const psInstitutionname = req.body.psInstitutionname
+      const sponsor = req.body.sponsorId
 
       Bene.findById(beneId)
         .then(bene => {
@@ -343,17 +346,17 @@ exports.updateBene = (req, res, next) => {
           bene.gender = gender;
           bene.age = age;
           bene.presentClass = presentClass;
-          bene.sponsor = sponsorId;
-          bene.phD.country = phDcountry
-          bene.phD.institutionName = phDiN
-          bene.postGraduate.country = pGcountry
-          bene.postGraduate.institutionName = pGin
-          bene.underGraduate.country = uGcountry
-          bene.underGraduate.institutionName = uGin
+          bene.sponsor = sponsor;
+          bene.phD.country = phdCountry
+          bene.phD.institutionName = phdInstitutionname
+          bene.postGraduate.country = pgCountry
+          bene.postGraduate.institutionName = pgInstitutionname
+          bene.underGraduate.country = ugCountry
+          bene.underGraduate.institutionName = ugInstitutionname
           bene.secondarySchool.country = ssCountry
-          bene.secondarySchool.institutionName = ssIn
+          bene.secondarySchool.institutionName = ssInstitutionname
           bene.primarySchool.country = psCountry
-          bene.primarySchool.institutionName = psIn
+          bene.primarySchool.institutionName = psInstitutionname
           bene.save();
         })
         .then(result => {
@@ -365,8 +368,9 @@ exports.updateBene = (req, res, next) => {
           }
           next(err);
         });
-    });
 
+    }
+    )
 }
 
 
@@ -390,7 +394,7 @@ exports.deleteBene = (req, res, next) => {
     })
     .then(result => {
       console.log(result);
-      res.status(200).json({ message: 'Deleted post.' });
+      res.status(200).json({ message: 'Deleted beneficiary.' });
     })
     .catch(err => {
       if (!err.statusCode) {

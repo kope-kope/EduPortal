@@ -26,7 +26,7 @@ router.post(
     body('name')
       .trim()
       .not()
-      .isEmpty()
+      .isEmpty(),
   ],
   authController.signup
 );
