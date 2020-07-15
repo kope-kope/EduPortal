@@ -1,0 +1,7 @@
+{
+    "env" : {
+        "MONGOUSER" : "tosin",
+        "MONGOPASSWORD" : "Cy2svEQC0bAz4IDv",
+        "MONGODB" : "portal?retryWrites=true&w=majority"
+    }
+}
