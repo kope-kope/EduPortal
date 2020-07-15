@@ -63,14 +63,14 @@ exports.createSponsor = (req, res, next) => {
   const email = req.body.email;
   const name = req.body.name;
   const nationality = req.body.nationality;
-  const dob = req.body.dob.toString()
+  const dob = req.body.dob
   const gender = req.body.gender;
   const address = req.body.address;
   const occupation = req.body.occupation;
   const maritalStatus = req.body.maritalStatus;
   const maidenName = req.body.maidenName;
   const mobileNumber = req.body.mobileNumber;
-  const insuranceCover = req.body.insuranceCover.toString()
+  const insuranceCover = req.body.insuranceCover
 
   // let creator;
   // const content = req.body.content;
