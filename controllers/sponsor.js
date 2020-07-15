@@ -1,14 +1,20 @@
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
 
 const { validationResult } = require('express-validator/check');
 
 const Sponsor = require('../models/sponsor');
 const User = require('../models/user');
 const Bene = require('../models/bene');
-const sponsor = require('../models/sponsor');
-const bene = require('../models/bene');
 
+const transporter = nodemailer.createTransport(sendgridTransport({
+  auth: 
+  {
+    api_key: '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'
+  }
+}))
 
 
 
@@ -284,14 +290,14 @@ exports.createBene = (req, res, next) => {
     .then(sponsor => {
       sponsor = sponsor;
       sponsor.beneficiaries.push(bene);
-      return sponsor.save();
-    })
-    .then(result =>
+     return  sponsor.save();
+  })
+    .then(result => {
       res.status(201).json({
         message: 'Beneficiary created successfully!',
         bene: bene
       })
-    )
+    })
     .catch(err => {
       if (!err.statusCode) {
         err.statusCode = 500;
@@ -300,6 +306,32 @@ exports.createBene = (req, res, next) => {
     });
 };
 
+exports.finalizesponsor = (req,res,next) =>{
+  const sponsor = req.body.sponsorId;
+  Sponsor.findById(sponsor)
+  .then(sponsor => 
+    {
+    transporter.sendMail({
+    to: sponsor.email,
+    from: "oluwatosin.oladokun@cordros.com",
+    subject: "We got your details",
+    html: "<h1>Thank You</h1>"
+}) 
+
+    }
+)
+.then(result => {
+  res.status(201).json({
+    message: 'Mail Sent'
+  })
+})
+.catch(err => {
+  if (!err.statusCode) {
+    err.statusCode = 500;
+  }
+  next(err);
+});
+};
 
 exports.updateBene = (req, res, next) => {
   const beneId = req.params.beneId;

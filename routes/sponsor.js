@@ -43,4 +43,10 @@ router.delete('/sponsors/:sponsorId', sponsorController.deleteSponsor);
 
 router.delete('/bene/:beneId', sponsorController.deleteBene);
 
+router.post(
+  '/mail',
+    
+  sponsorController.finalizesponsor
+);
+
 module.exports = router;
