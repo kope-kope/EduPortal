@@ -11,7 +11,9 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
-const MONGODB_URI = 'mongodb+srv://tosin:Cy2svEQC0bAz4IDv@cluster0-hqnwm.mongodb.net/feed?retryWrites=true&w=majority';
+const MONGODB_URI = 
+
+`mongodb+srv://tosin:Cy2svEQC0bAz4IDv@cluster0-hqnwm.mongodb.net/portal?retryWrites=true&w=majority`
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
