@@ -12,7 +12,7 @@ const Bene = require('../models/bene');
 const transporter = nodemailer.createTransport(sendgridTransport({
   auth: 
   {
-    api_key: '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'
+    api_key: process.env.api_key
   }
 }))
 
@@ -313,9 +313,9 @@ exports.finalizesponsor = (req,res,next) =>{
     {
     transporter.sendMail({
     to: sponsor.email,
-    from: "oluwatosin.oladokun@cordros.com",
-    subject: "We got your details",
-    html: "<h1>Thank You</h1>"
+    from: process.env.FROM,
+    subject: "Cordros Edu Portal",
+    html: "<h1>Thank You</h1> <p>We got your details </p>"
 }) 
 
     }
