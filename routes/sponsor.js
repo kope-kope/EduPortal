@@ -3,6 +3,7 @@ const { body } = require('express-validator/check');
 
 const sponsorController = require('../controllers/sponsor');
 const isAuth = require('../middleware/is-auth')
+const parser = require('../controllers/config/multer')
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.get('/sponsors', sponsorController.getSponsors);
 
 router.post(
   '/sponsors',
-    
+    parser.single('signature'),
   sponsorController.createSponsor
 );
 

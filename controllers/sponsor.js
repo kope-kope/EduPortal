@@ -9,6 +9,7 @@ const Sponsor = require('../models/sponsor');
 const User = require('../models/user');
 const Bene = require('../models/bene');
 
+
 const transporter = nodemailer.createTransport(sendgridTransport({
   auth: 
   {
@@ -54,12 +55,12 @@ exports.createSponsor = (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
-  // if (!req.file) {
-  //   const error = new Error('No Signature provided.');
-  //   error.statusCode = 422;
-  //   throw error;
-  // }
-  // const signature = req.file.path.replace('\\', '/');
+  if (!req.file) {
+  const error = new Error('No Signature provided.');
+   error.statusCode = 422;
+  throw error;
+  }
+  const signature = req.file.path;
   const email = req.body.email;
   const name = req.body.name;
   const nationality = req.body.nationality;
@@ -85,7 +86,7 @@ exports.createSponsor = (req, res, next) => {
     maritalStatus: maritalStatus,
     mobileNumber: mobileNumber,
     maidenName: maidenName,
-    // signature: signature,
+    signature: signature,
     insuranceCover: insuranceCover
   });
   sponsor

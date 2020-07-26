@@ -51,6 +51,11 @@ const sponsorSchema = new Schema(
     type: String,
     required: true
   },
+  
+  signature: {
+    type: String,
+    required: true
+  },
 
    beneficiaries: [
     {
