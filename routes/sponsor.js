@@ -13,7 +13,7 @@ router.get('/sponsors', sponsorController.getSponsors);
 
 router.post(
   '/sponsors',
-    parser.single('signature'),
+    parser.single('file'),
   sponsorController.createSponsor
 );
 
